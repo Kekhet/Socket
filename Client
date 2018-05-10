@@ -1,0 +1,55 @@
+import socket
+
+
+def show_menu():
+    print("Commands: \n 1. Show list \n 2. Show by priority \n 3. Add \n 4. Delete \n 5. Exit \n")
+
+
+def show_list():
+    s.send("show//".encode())
+    print(s.recv(1024).decode())
+
+
+def show_by_priority():
+    x = input("Chose priority: \n 1. Low \n 2. Normal \n 3. High \n")
+    if x == "1" or x == "2" or x == "3":
+        s.send(("show/" + x + "/").encode())
+        print(s.recv(1024).decode())
+
+
+def add_task():
+    title = input("Title: ")
+    priority = input("Chose priority: \n 1. Low \n 2. Normal \n 3. High \n")
+    if priority == "1" or priority == "2" or priority == "3":
+        s.send(("add/" + title + "/" + priority).encode())
+    else:
+        print("Wrong priority")
+
+
+def delete_task():
+    x = input("Target id: ")
+    s.send(("remove/" + x + "/").encode())
+    print(s.recv(1024).decode())
+
+
+s = socket.socket()
+host = socket.gethostname()
+port = 12345
+s.connect((host, port))
+_exit = 1
+while _exit != 0:
+    show_menu()
+    x = input()
+    if x == "1":
+        show_list()
+    elif x == "2":
+        show_by_priority()
+    elif x == "3":
+        add_task()
+    elif x == "4":
+        delete_task()
+    elif x == "5":
+        _exit = 0
+        s.close()
+
+
